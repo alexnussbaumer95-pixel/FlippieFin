@@ -44,7 +44,7 @@
             --scroll-thumb: #1e293b;
         }
 
-        /* Correzione globale per la visibilità di tutti i testi e selettori in modalità chiara */
+        /* Correzione globale per la visibilità di tutti i testi, selettori, input e titoli in modalità chiara */
         html:not(.dark) select,
         html:not(.dark) input {
             color: #0f172a !important;
@@ -54,7 +54,9 @@
             color: #0f172a !important;
             background-color: #ffffff !important;
         }
-        html:not(.dark) #display-initial-bank {
+        html:not(.dark) #display-initial-bank,
+        html:not(.dark) h2.text-white,
+        html:not(.dark) span.text-white {
             color: #0f172a !important;
         }
     </style>
