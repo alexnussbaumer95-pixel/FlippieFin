@@ -81,15 +81,15 @@
             <div class="grid grid-cols-3 md:flex md:items-center gap-3 text-sm w-full lg:w-auto">
                 <div class="bg-dash-bg/60 dark:bg-dash-bg/60 bg-slate-100 px-3.5 py-2 rounded-xl border border-border-custom">
                     <div class="text-[11px] text-text-muted uppercase tracking-wider font-medium">Net Worth</div>
-                    <div class="font-extrabold text-lg text-white dark:text-white text-slate-900 mt-0.5" id="header-networth">0,00 €</div>
+                    <div class="font-extrabold text-lg text-white dark:text-white text-slate-900 mt-0.5" id="header-networth">20.000,00€</div>
                 </div>
                 <div class="bg-dash-bg/60 dark:bg-dash-bg/60 bg-slate-100 px-3.5 py-2 rounded-xl border border-border-custom">
                     <div class="text-[11px] text-text-muted uppercase tracking-wider font-medium">Entrate</div>
-                    <div class="font-extrabold text-lg text-green-custom mt-0.5" id="header-income">0,00 €</div>
+                    <div class="font-extrabold text-lg text-green-custom mt-0.5" id="header-income">20.000,00€</div>
                 </div>
                 <div class="bg-dash-bg/60 dark:bg-dash-bg/60 bg-slate-100 px-3.5 py-2 rounded-xl border border-border-custom">
                     <div class="text-[11px] text-text-muted uppercase tracking-wider font-medium">Uscite</div>
-                    <div class="font-extrabold text-lg text-red-custom mt-0.5" id="header-expense">0,00 €</div>
+                    <div class="font-extrabold text-lg text-red-custom mt-0.5" id="header-expense">20.000,00€</div>
                 </div>
             </div>
             
@@ -127,14 +127,14 @@
                 <div class="bg-card-bg dark:bg-card-bg bg-white p-5 rounded-2xl border border-border-custom shadow-xl flex justify-between items-center">
                     <div>
                         <div class="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">🏦 Saldo Banca Iniziale</div>
-                        <div class="text-xl font-extrabold text-white dark:text-white text-slate-900" id="display-initial-bank">0,00 €</div>
+                        <div class="text-xl font-extrabold text-white dark:text-white text-slate-900" id="display-initial-bank">20.000,00€</div>
                     </div>
                     <button onclick="editInitialBank()" class="bg-dash-bg dark:bg-dash-bg bg-slate-100 hover:bg-border-custom text-blue-custom border border-border-custom px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">Modifica</button>
                 </div>
                 <div class="bg-card-bg dark:bg-card-bg bg-white p-5 rounded-2xl border border-border-custom shadow-xl flex justify-between items-center">
                     <div>
                         <div class="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">💳 Saldo Banca Finale</div>
-                        <div class="text-xl font-extrabold text-blue-custom" id="display-final-bank">0,00 €</div>
+                        <div class="text-xl font-extrabold text-blue-custom" id="display-final-bank">20.000,00€</div>
                     </div>
                     <span class="text-[11px] text-text-muted bg-dash-bg dark:bg-dash-bg bg-slate-100 px-3 py-1.5 rounded-xl border border-border-custom">Aggiornato in tempo reale</span>
                 </div>
@@ -286,7 +286,7 @@
                         </select>
                         <div class="text-right bg-dash-bg dark:bg-dash-bg bg-slate-100 px-4 py-2 rounded-xl border border-border-custom">
                             <span class="text-[10px] text-text-muted block uppercase font-medium">Bilancio Previsto Annuo</span>
-                            <span class="font-extrabold text-sm text-blue-custom" id="plan-net-balance">0,00 €</span>
+                            <span class="font-extrabold text-sm text-blue-custom" id="plan-net-balance">20.000,00€</span>
                         </div>
                     </div>
                 </div>
@@ -556,7 +556,15 @@
         }
 
         function formatCurrency(amount) {
-            return new Intl.NumberFormat('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount) + ' €';
+            // Formattazione con separatore delle migliaia a punto e decimali a virgola, seguito direttamente da €
+            const parts = Number(amount).toFixed(2).split('.');
+            let integerPart = parts[0];
+            const decimalPart = parts[1];
+            
+            // Aggiungi il punto come separatore delle migliaia
+            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            
+            return `${integerPart},${decimalPart}€`;
         }
 
         function initYearSelectors() {
