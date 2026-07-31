@@ -139,7 +139,7 @@
                     <div class="bg-card-bg p-6 rounded-2xl border border-border-custom shadow-xl">
                         <div class="flex justify-between items-center mb-4">
                             <h2 id="form-title" class="text-xs font-bold text-text-muted uppercase tracking-wider">Nuovo Movimento</h2>
-                            <span class="text-[11px] text-green-custom font-medium" id="quick-date-badge">Oggi: 30/07/2026</span>
+                            <span class="text-[11px] text-green-custom font-medium" id="quick-date-badge">Oggi: --/--/----</span>
                         </div>
                         <form id="transaction-form" class="space-y-4">
                             <input type="hidden" id="edit-index" value="-1">
@@ -542,7 +542,7 @@
                     await saveUserDataToCloud();
                 }
                 initYearSelectors();
-                setYear(2026);
+                setYear(new Date().getFullYear());
             } catch (e) {
                 console.error("Errore caricamento cloud: ", e);
             }
@@ -554,8 +554,8 @@
         Chart.defaults.color = '#94a3b8';
         Chart.defaults.plugins.legend.labels.boxWidth = 10;
 
-        let selectedYear = 2026;
-        let planYear = 2027;
+        let selectedYear = new Date().getFullYear();
+        let planYear = selectedYear + 1;
 
         function formatCurrency(amount) {
             return new Intl.NumberFormat('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount) + ' €';
@@ -653,8 +653,20 @@
         const budgetsContainer = document.getElementById('budgets-container');
 
         let netWorthChart, categoryPieChart, topExpensesChart;
-        const realTodayStr = "2026-07-30";
+
+        // Calcolo dinamico della data odierna
+        const todayObj = new Date();
+        const currentYear = todayObj.getFullYear();
+        const currentMonth = String(todayObj.getMonth() + 1).padStart(2, '0');
+        const currentDay = String(todayObj.getDate()).padStart(2, '0');
+        const realTodayStr = `${currentYear}-${currentMonth}-${currentDay}`;
+        
         dateInput.value = realTodayStr;
+        
+        const quickDateBadge = document.getElementById('quick-date-badge');
+        if (quickDateBadge) {
+            quickDateBadge.textContent = `Oggi: ${currentDay}/${currentMonth}/${currentYear}`;
+        }
 
         function switchPage(page) {
             ['dashboard', 'planning', 'goals', 'calculator', 'export'].forEach(p => {
