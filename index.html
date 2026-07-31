@@ -43,9 +43,20 @@
             --scroll-track: #070b10;
             --scroll-thumb: #1e293b;
         }
+
+        /* Correzione globale per la visibilità del testo nei selettori e input in modalità chiara */
+        html:not(.dark) select,
+        html:not(.dark) input {
+            color: #0f172a !important;
+            background-color: #ffffff !important;
+        }
+        html:not(.dark) select option {
+            color: #0f172a !important;
+            background-color: #ffffff !important;
+        }
     </style>
 </head>
-<body class="bg-dash-bg text-slate-200 dark:bg-dash-bg dark:text-slate-200 bg-slate-100 text-slate-800 min-h-screen p-4 md:p-6 font-sans antialiased transition-colors duration-200">
+<body class="bg-dash-bg text-slate-200 dark:bg-dash-bg dark:text-slate-200 bg-slate-100 text-slate-900 min-h-screen p-4 md:p-6 font-sans antialiased transition-colors duration-200">
 
     <!-- SCHERMATA DI AUTENTICAZIONE (LOGIN / REGISTRAZIONE) -->
     <div id="auth-screen" class="fixed inset-0 bg-dash-bg dark:bg-dash-bg bg-slate-100 z-50 flex items-center justify-center p-4">
@@ -60,16 +71,16 @@
             <form id="auth-form" class="space-y-4">
                 <div>
                     <label class="block text-[11px] text-text-muted mb-1 font-medium">Email</label>
-                    <input type="email" id="auth-email" required placeholder="tuamail@example.com" class="w-full p-3 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none focus:ring-2 focus:ring-green-custom">
+                    <input type="email" id="auth-email" required placeholder="tuamail@example.com" class="w-full p-3 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom">
                 </div>
                 <div>
                     <label class="block text-[11px] text-text-muted mb-1 font-medium">Password</label>
-                    <input type="password" id="auth-password" required placeholder="••••••••" class="w-full p-3 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none focus:ring-2 focus:ring-green-custom">
+                    <input type="password" id="auth-password" required placeholder="••••••••" class="w-full p-3 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom">
                 </div>
                 
                 <div class="space-y-2 pt-2">
                     <button type="submit" id="auth-submit-btn" class="w-full bg-green-custom hover:bg-emerald-500 text-dash-bg font-bold p-3 rounded-xl text-xs transition shadow-lg cursor-pointer">Accedi</button>
-                    <button type="button" id="auth-switch-mode" onclick="toggleAuthMode()" class="w-full bg-dash-bg dark:bg-dash-bg bg-slate-50 hover:bg-border-custom text-text-muted hover:text-white dark:hover:text-white hover:text-slate-900 font-medium p-2.5 rounded-xl text-xs transition border border-border-custom cursor-pointer">Non hai un account? Registrati</button>
+                    <button type="button" id="auth-switch-mode" onclick="toggleAuthMode()" class="w-full bg-dash-bg dark:bg-dash-bg bg-slate-50 hover:bg-border-custom text-text-muted hover:text-slate-900 font-medium p-2.5 rounded-xl text-xs transition border border-border-custom cursor-pointer">Non hai un account? Registrati</button>
                 </div>
             </form>
         </div>
@@ -96,9 +107,9 @@
             <div class="flex flex-wrap items-center justify-between lg:justify-end gap-3 w-full lg:w-auto">
                 <div class="flex items-center bg-dash-bg dark:bg-dash-bg bg-slate-100 p-1 rounded-xl border border-border-custom overflow-x-auto">
                     <button onclick="switchPage('dashboard')" id="nav-btn-dash" class="px-3 py-2 rounded-lg bg-green-custom text-dash-bg font-bold text-xs transition shadow-sm cursor-pointer whitespace-nowrap">Dashboard</button>
-                    <button onclick="switchPage('planning')" id="nav-btn-planning" class="px-3 py-2 rounded-lg text-text-muted hover:text-white dark:hover:text-white hover:text-slate-900 font-medium text-xs transition cursor-pointer whitespace-nowrap">Piano Futuro</button>
+                    <button onclick="switchPage('planning')" id="nav-btn-planning" class="px-3 py-2 rounded-lg text-text-muted hover:text-slate-900 font-medium text-xs transition cursor-pointer whitespace-nowrap">Piano Futuro</button>
                     
-                    <button onclick="switchPage('goals')" id="nav-btn-goals" class="px-3 py-2 rounded-lg text-text-muted hover:text-white dark:hover:text-white hover:text-slate-900 font-medium text-xs transition cursor-pointer whitespace-nowrap relative">
+                    <button onclick="switchPage('goals')" id="nav-btn-goals" class="px-3 py-2 rounded-lg text-text-muted hover:text-slate-900 font-medium text-xs transition cursor-pointer whitespace-nowrap relative">
                         Obiettivi & Budget
                         <span id="budget-alert-badge" class="hidden absolute -top-1 -right-1 flex h-3 w-3">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -106,13 +117,13 @@
                         </span>
                     </button>
 
-                    <button onclick="switchPage('export')" id="nav-btn-export" class="px-3 py-2 rounded-lg text-text-muted hover:text-white dark:hover:text-white hover:text-slate-900 font-medium text-xs transition cursor-pointer whitespace-nowrap">Export Excel</button>
+                    <button onclick="switchPage('export')" id="nav-btn-export" class="px-3 py-2 rounded-lg text-text-muted hover:text-slate-900 font-medium text-xs transition cursor-pointer whitespace-nowrap">Export Excel</button>
                 </div>
                 
                 <div class="flex items-center gap-3">
                     <div class="text-right">
                         <div class="text-[10px] uppercase font-bold text-text-muted tracking-wider mb-1">Anno</div>
-                        <select id="year-select-dropdown" onchange="setYear(parseInt(this.value))" class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs font-bold text-slate-100 dark:text-slate-100 text-slate-800 outline-none cursor-pointer focus:ring-1 focus:ring-green-custom">
+                        <select id="year-select-dropdown" onchange="setYear(parseInt(this.value))" class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs font-bold outline-none cursor-pointer focus:ring-1 focus:ring-green-custom">
                         </select>
                     </div>
                     <button onclick="toggleTheme()" class="bg-dash-bg dark:bg-dash-bg bg-slate-100 hover:bg-border-custom text-amber-custom border border-border-custom p-2.5 rounded-xl text-xs font-semibold transition cursor-pointer" id="theme-toggle-btn" title="Cambia Tema">☀️/🌙</button>
@@ -162,11 +173,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <div>
                                     <label class="block text-[11px] text-text-muted mb-1 font-medium">Descrizione</label>
-                                    <input type="text" id="description" placeholder="es. Affitto, Stipendio..." required class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 focus:ring-2 focus:ring-green-custom outline-none transition">
+                                    <input type="text" id="description" placeholder="es. Affitto, Stipendio..." required class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition">
                                 </div>
                                 <div>
                                     <label class="block text-[11px] text-text-muted mb-1 font-medium">Categoria</label>
-                                    <select id="category" class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 focus:ring-2 focus:ring-green-custom outline-none transition cursor-pointer">
+                                    <select id="category" class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition cursor-pointer">
                                         <option value="Casa">🏠 Casa</option>
                                         <option value="Alimentari">🛒 Alimentari</option>
                                         <option value="Stipendio">💰 Stipendio</option>
@@ -179,24 +190,24 @@
                                 </div>
                                 <div>
                                     <label class="block text-[11px] text-text-muted mb-1 font-medium">Data Movimento</label>
-                                    <input type="date" id="transaction-date" required class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 focus:ring-2 focus:ring-green-custom outline-none transition">
+                                    <input type="date" id="transaction-date" required class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition">
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <div>
                                     <label class="block text-[11px] text-text-muted mb-1 font-medium">Importo (€)</label>
-                                    <input type="number" step="0.01" id="amount" placeholder="0.00" required class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 focus:ring-2 focus:ring-green-custom outline-none transition">
+                                    <input type="number" step="0.01" id="amount" placeholder="0.00" required class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition">
                                 </div>
                                 <div>
                                     <label class="block text-[11px] text-text-muted mb-1 font-medium">Tipo</label>
-                                    <select id="type" class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 focus:ring-2 focus:ring-green-custom outline-none transition cursor-pointer">
+                                    <select id="type" class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition cursor-pointer">
                                         <option value="expense">🔴 Uscita (Costo)</option>
                                         <option value="income">🟢 Entrata (Ricavo)</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-[11px] text-text-muted mb-1 font-medium">Ricorrenza Automatica</label>
-                                    <select id="recurrence" class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 focus:ring-2 focus:ring-green-custom outline-none transition cursor-pointer">
+                                    <select id="recurrence" class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition cursor-pointer">
                                         <option value="none">Singola (Nessuna)</option>
                                         <option value="monthly">Ricorrente Mensile (12 mesi)</option>
                                     </select>
@@ -204,7 +215,7 @@
                             </div>
                             <div>
                                 <label class="block text-[11px] text-text-muted mb-1 font-medium">Note (Opzionale)</label>
-                                <input type="text" id="notes" placeholder="Dettagli aggiuntivi..." class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 focus:ring-2 focus:ring-green-custom outline-none transition">
+                                <input type="text" id="notes" placeholder="Dettagli aggiuntivi..." class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition">
                             </div>
                             <div class="flex justify-end space-x-2 pt-2">
                                 <button type="button" id="cancel-edit" onclick="resetForm()" class="hidden bg-border-custom hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-semibold transition cursor-pointer">Annulla</button>
@@ -238,10 +249,10 @@
                                 <p class="text-[11px] text-slate-400 mt-0.5">Gestisci, modifica o elimina i movimenti finanziari registrati.</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                                <input type="text" id="search-box" oninput="filterTransactions()" placeholder="Cerca voce o nota..." class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-200 dark:text-slate-200 text-slate-800 outline-none w-full sm:w-44 focus:ring-1 focus:ring-green-custom">
-                                <input type="number" step="0.01" id="filter-amount" oninput="filterTransactions()" placeholder="Filtra importo..." class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-200 dark:text-slate-200 text-slate-800 outline-none w-full sm:w-32 focus:ring-1 focus:ring-green-custom">
-                                <input type="date" id="filter-date" onchange="filterTransactions()" class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-200 dark:text-slate-200 text-slate-800 outline-none w-full sm:w-36 focus:ring-1 focus:ring-green-custom">
-                                <select id="filter-cat" onchange="filterTransactions()" class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-200 dark:text-slate-200 text-slate-800 outline-none cursor-pointer">
+                                <input type="text" id="search-box" oninput="filterTransactions()" placeholder="Cerca voce o nota..." class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none w-full sm:w-44 focus:ring-1 focus:ring-green-custom">
+                                <input type="number" step="0.01" id="filter-amount" oninput="filterTransactions()" placeholder="Filtra importo..." class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none w-full sm:w-32 focus:ring-1 focus:ring-green-custom">
+                                <input type="date" id="filter-date" onchange="filterTransactions()" class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none w-full sm:w-36 focus:ring-1 focus:ring-green-custom">
+                                <select id="filter-cat" onchange="filterTransactions()" class="p-2 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none cursor-pointer">
                                     <option value="ALL">Tutte le Categorie</option>
                                     <option value="Casa">Casa</option>
                                     <option value="Alimentari">Alimentari</option>
@@ -282,7 +293,7 @@
                         <p class="text-xs text-text-muted mt-0.5">Pianifica costi fissi e ricavi ricorrenti impostando il numero di mesi di attivazione.</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <select id="plan-year-select" onchange="changePlanYear(this.value)" class="p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none font-semibold cursor-pointer">
+                        <select id="plan-year-select" onchange="changePlanYear(this.value)" class="p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none font-semibold cursor-pointer">
                         </select>
                         <div class="text-right bg-dash-bg dark:bg-dash-bg bg-slate-100 px-4 py-2 rounded-xl border border-border-custom">
                             <span class="text-[10px] text-text-muted block uppercase font-medium">Bilancio Previsto Annuo</span>
@@ -293,8 +304,8 @@
 
                 <form id="planning-form" class="grid grid-cols-1 md:grid-cols-6 gap-3 bg-dash-bg dark:bg-dash-bg bg-slate-100 p-4 rounded-xl border border-border-custom">
                     <input type="hidden" id="plan-edit-index" value="-1">
-                    <input type="text" id="plan-desc" placeholder="es. Affitto, Mutuo, Stipendio..." required class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none">
-                    <select id="plan-cat" class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none cursor-pointer">
+                    <input type="text" id="plan-desc" placeholder="es. Affitto, Mutuo, Stipendio..." required class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs outline-none">
+                    <select id="plan-cat" class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs outline-none cursor-pointer">
                         <option value="Casa">🏠 Casa</option>
                         <option value="Alimentari">🛒 Alimentari</option>
                         <option value="Stipendio">💰 Stipendio</option>
@@ -304,12 +315,12 @@
                         <option value="Salute">💊 Salute</option>
                         <option value="Altro">📦 Altro</option>
                     </select>
-                    <select id="plan-type" class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none cursor-pointer">
+                    <select id="plan-type" class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs outline-none cursor-pointer">
                         <option value="expense">🔴 Costo Annuo</option>
                         <option value="income">🟢 Ricavo Annuo</option>
                     </select>
-                    <input type="number" step="0.01" id="plan-amount" placeholder="Importo Mensile (€)" required class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none">
-                    <input type="number" id="plan-months" placeholder="Mesi (1-12)" value="12" min="1" max="12" required class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none">
+                    <input type="number" step="0.01" id="plan-amount" placeholder="Importo Mensile (€)" required class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs outline-none">
+                    <input type="number" id="plan-months" placeholder="Mesi (1-12)" value="12" min="1" max="12" required class="p-2.5 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-xl text-xs outline-none">
                     <div class="flex gap-2">
                         <button type="button" id="plan-cancel-btn" onclick="resetPlanForm()" class="hidden bg-border-custom hover:bg-slate-700 text-slate-300 font-bold p-2.5 rounded-xl text-xs transition cursor-pointer w-1/3">Annulla</button>
                         <button type="submit" id="plan-submit-btn" class="bg-green-custom hover:bg-emerald-500 text-dash-bg font-bold p-2.5 rounded-xl text-xs transition shadow-md cursor-pointer w-full">Aggiungi</button>
@@ -344,9 +355,9 @@
                         <span class="text-[11px] text-text-muted">Traguardi finanziari</span>
                     </div>
                     <form id="goal-form" class="grid grid-cols-1 sm:grid-cols-4 gap-2 bg-dash-bg dark:bg-dash-bg bg-slate-100 p-3 rounded-xl border border-border-custom">
-                        <input type="text" id="goal-title" placeholder="es. Fondo Emergenze" required class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none">
-                        <input type="number" step="0.01" id="goal-current" placeholder="Attuale (€)" required class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none">
-                        <input type="number" step="0.01" id="goal-target" placeholder="Target (€)" required class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none">
+                        <input type="text" id="goal-title" placeholder="es. Fondo Emergenze" required class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs outline-none">
+                        <input type="number" step="0.01" id="goal-current" placeholder="Attuale (€)" required class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs outline-none">
+                        <input type="number" step="0.01" id="goal-target" placeholder="Target (€)" required class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs outline-none">
                         <button type="submit" class="bg-green-custom hover:bg-emerald-500 text-dash-bg font-bold p-2 rounded-lg text-xs transition cursor-pointer">Aggiungi</button>
                     </form>
                     <div id="goals-container" class="space-y-3 max-h-[300px] overflow-y-auto pr-1"></div>
@@ -358,7 +369,7 @@
                         <span class="text-[11px] text-text-muted">Controllo soglie spesa</span>
                     </div>
                     <form id="budget-form" class="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-dash-bg dark:bg-dash-bg bg-slate-100 p-3 rounded-xl border border-border-custom">
-                        <select id="budget-cat" class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none cursor-pointer">
+                        <select id="budget-cat" class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs outline-none cursor-pointer">
                             <option value="Casa">🏠 Casa</option>
                             <option value="Alimentari">🛒 Alimentari</option>
                             <option value="Svago">🎉 Svago</option>
@@ -367,7 +378,7 @@
                             <option value="Salute">💊 Salute</option>
                             <option value="Altro">📦 Altro</option>
                         </select>
-                        <input type="number" step="0.01" id="budget-limit" placeholder="Limite Mensile (€)" required class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs text-slate-100 dark:text-slate-100 text-slate-800 outline-none">
+                        <input type="number" step="0.01" id="budget-limit" placeholder="Limite Mensile (€)" required class="p-2 bg-card-bg dark:bg-card-bg bg-white border border-border-custom rounded-lg text-xs outline-none">
                         <button type="submit" class="bg-blue-custom hover:bg-sky-400 text-dash-bg font-bold p-2 rounded-lg text-xs transition cursor-pointer">Imposta Budget</button>
                     </form>
                     <div id="budgets-container" class="space-y-3 max-h-[300px] overflow-y-auto pr-1"></div>
@@ -556,14 +567,10 @@
         }
 
         function formatCurrency(amount) {
-            // Formattazione con separatore delle migliaia a punto e decimali a virgola, seguito direttamente da €
             const parts = Number(amount).toFixed(2).split('.');
             let integerPart = parts[0];
             const decimalPart = parts[1];
-            
-            // Aggiungi il punto come separatore delle migliaia
             integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            
             return `${integerPart},${decimalPart}€`;
         }
 
@@ -661,7 +668,6 @@
 
         let netWorthChart, categoryPieChart, topExpensesChart;
 
-        // Calcolo dinamico della data odierna
         const todayObj = new Date();
         const currentYear = todayObj.getFullYear();
         const currentMonth = String(todayObj.getMonth() + 1).padStart(2, '0');
@@ -680,7 +686,7 @@
                 const el = document.getElementById(`page-${p}`);
                 const btn = document.getElementById(`nav-btn-${p}`);
                 if (el) el.classList.add('hidden');
-                if (btn) btn.className = "px-3 py-2 rounded-lg text-text-muted hover:text-white dark:hover:text-white hover:text-slate-900 font-medium text-xs transition cursor-pointer whitespace-nowrap";
+                if (btn) btn.className = "px-3 py-2 rounded-lg text-text-muted hover:text-slate-900 font-medium text-xs transition cursor-pointer whitespace-nowrap";
             });
             
             const activePage = document.getElementById(`page-${page}`);
@@ -807,10 +813,10 @@
                         const row = document.createElement('tr');
                         row.className = "hover:bg-dash-bg/50 transition";
                         row.innerHTML = `
-                            <td class="p-3 text-slate-300 dark:text-slate-300 text-slate-700 font-medium">${!isNaN(tDate.getTime()) ? tDate.toLocaleDateString('it-IT') : '-'}</td>
-                            <td class="p-3"><span class="bg-dash-bg dark:bg-dash-bg bg-slate-100 px-2.5 py-1 rounded-lg border border-border-custom text-slate-300 dark:text-slate-300 text-slate-700">${t.category}</span></td>
+                            <td class="p-3 text-slate-700 dark:text-slate-300 font-medium">${!isNaN(tDate.getTime()) ? tDate.toLocaleDateString('it-IT') : '-'}</td>
+                            <td class="p-3"><span class="bg-dash-bg dark:bg-dash-bg bg-slate-100 px-2.5 py-1 rounded-lg border border-border-custom text-slate-700 dark:text-slate-300">${t.category}</span></td>
                             <td class="p-3">
-                                <div class="font-bold text-white dark:text-white text-slate-900">${t.description}</div>
+                                <div class="font-bold text-slate-900 dark:text-white">${t.description}</div>
                                 ${t.notes ? `<div class="text-[10px] text-text-muted">${t.notes}</div>` : ''}
                             </td>
                             <td class="p-3 text-right font-extrabold ${t.type === 'income' ? 'text-green-custom' : 'text-red-custom'}">
@@ -991,11 +997,11 @@
                     const row = document.createElement('tr');
                     row.className = "hover:bg-dash-bg/50 transition";
                     row.innerHTML = `
-                        <td class="p-3 text-white dark:text-white text-slate-900 font-bold">${p.description}</td>
-                        <td class="p-3"><span class="bg-dash-bg dark:bg-dash-bg bg-slate-100 px-2.5 py-1 rounded-lg border border-border-custom text-slate-300 dark:text-slate-300 text-slate-700">${p.category}</span></td>
+                        <td class="p-3 text-slate-900 dark:text-white font-bold">${p.description}</td>
+                        <td class="p-3"><span class="bg-dash-bg dark:bg-dash-bg bg-slate-100 px-2.5 py-1 rounded-lg border border-border-custom text-slate-700 dark:text-slate-300">${p.category}</span></td>
                         <td class="p-3 font-semibold ${p.type === 'income' ? 'text-green-custom' : 'text-red-custom'}">${p.type === 'income' ? '🟢 Ricavo' : '🔴 Costo'}</td>
-                        <td class="p-3 text-center text-slate-200 dark:text-slate-200 text-slate-800">${formatCurrency(p.amount)}</td>
-                        <td class="p-3 text-center text-slate-300 dark:text-slate-300 text-slate-700">${p.months} mesi</td>
+                        <td class="p-3 text-center text-slate-800 dark:text-slate-200">${formatCurrency(p.amount)}</td>
+                        <td class="p-3 text-center text-slate-700 dark:text-slate-300">${p.months} mesi</td>
                         <td class="p-3 text-right font-extrabold ${p.type === 'income' ? 'text-green-custom' : 'text-red-custom'}">${p.type === 'income' ? '+' : '-'}${formatCurrency(annualAmount)}</td>
                         <td class="p-3 text-center space-x-2">
                             <button onclick="editPlanItem(${index})" class="text-blue-custom hover:underline font-semibold cursor-pointer">Modifica</button>
@@ -1091,14 +1097,14 @@
                 item.className = "bg-dash-bg dark:bg-dash-bg bg-slate-50 p-3.5 rounded-xl border border-border-custom space-y-2";
                 item.innerHTML = `
                     <div class="flex justify-between items-center text-xs">
-                        <span class="font-bold text-white dark:text-white text-slate-900">${g.title}</span>
+                        <span class="font-bold text-slate-900 dark:text-white">${g.title}</span>
                         <span class="text-text-muted">Target: ${formatCurrency(g.target)}</span>
                     </div>
                     <div class="w-full bg-border-custom h-2.5 rounded-full overflow-hidden">
                         <div class="bg-green-custom h-full transition-all duration-500" style="width: ${pct}%"></div>
                     </div>
                     <div class="flex justify-between items-center text-[11px]">
-                        <span class="text-slate-300 dark:text-slate-300 text-slate-700 font-semibold">Attuale: ${formatCurrency(g.current)} (${pct}%)</span>
+                        <span class="text-slate-700 dark:text-slate-300 font-semibold">Attuale: ${formatCurrency(g.current)} (${pct}%)</span>
                         <div class="space-x-2">
                             <button onclick="editGoal(${i})" class="text-blue-custom hover:underline font-semibold cursor-pointer">Modifica</button>
                             <button onclick="deleteGoal(${i})" class="text-red-400 hover:text-red-300 font-semibold cursor-pointer">Elimina</button>
@@ -1141,14 +1147,14 @@
                 item.className = "bg-dash-bg dark:bg-dash-bg bg-slate-50 p-3.5 rounded-xl border border-border-custom space-y-2";
                 item.innerHTML = `
                     <div class="flex justify-between items-center text-xs">
-                        <span class="font-bold text-white dark:text-white text-slate-900">${cat}</span>
+                        <span class="font-bold text-slate-900 dark:text-white">${cat}</span>
                         <span class="text-text-muted">Limite: ${formatCurrency(limit)}</span>
                     </div>
                     <div class="w-full bg-border-custom h-2.5 rounded-full overflow-hidden">
                         <div class="${barColor} h-full transition-all duration-500" style="width: ${pct}%"></div>
                     </div>
                     <div class="flex justify-between items-center text-[11px]">
-                        <span class="text-slate-300 dark:text-slate-300 text-slate-700 font-semibold">Speso: ${formatCurrency(spent)} (${pct}%)</span>
+                        <span class="text-slate-700 dark:text-slate-300 font-semibold">Speso: ${formatCurrency(spent)} (${pct}%)</span>
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] text-amber-custom">${alertText}</span>
                             <div class="space-x-2">
@@ -1171,10 +1177,10 @@
                 const row = document.createElement('tr');
                 row.className = "hover:bg-dash-bg/50 transition";
                 row.innerHTML = `
-                    <td class="p-3 text-slate-300 dark:text-slate-300 text-slate-700">${dateFormatted}</td>
+                    <td class="p-3 text-slate-700 dark:text-slate-300">${dateFormatted}</td>
                     <td class="p-3 font-semibold ${t.type === 'income' ? 'text-green-custom' : 'text-red-custom'}">${t.type === 'income' ? 'Entrata' : 'Uscita'}</td>
-                    <td class="p-3 text-slate-300 dark:text-slate-300 text-slate-700">${t.category}</td>
-                    <td class="p-3 text-white dark:text-white text-slate-900 font-medium">${t.description}</td>
+                    <td class="p-3 text-slate-700 dark:text-slate-300">${t.category}</td>
+                    <td class="p-3 text-slate-900 dark:text-white font-medium">${t.description}</td>
                     <td class="p-3 text-text-muted">${t.notes || '-'}</td>
                     <td class="p-3 text-right font-bold ${t.type === 'income' ? 'text-green-custom' : 'text-red-custom'}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</td>
                     <td class="p-3 text-center space-x-2">
