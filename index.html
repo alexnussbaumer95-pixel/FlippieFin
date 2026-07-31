@@ -37,7 +37,7 @@
 </head>
 <body class="bg-dash-bg text-slate-200 min-h-screen p-4 md:p-6 font-sans antialiased">
 
-    <!-- SCHERMATA DI AUTENTICAZIONE (LOGIN / REGISTRAZIONE / GOOGLE) -->
+    <!-- SCHERMATA DI AUTENTICAZIONE (LOGIN / REGISTRAZIONE) -->
     <div id="auth-screen" class="fixed inset-0 bg-dash-bg z-50 flex items-center justify-center p-4">
         <div class="bg-card-bg border border-border-custom p-8 rounded-2xl shadow-2xl w-full max-w-md space-y-6">
             <div class="text-center space-y-2">
@@ -59,9 +59,6 @@
                 
                 <div class="space-y-2 pt-2">
                     <button type="submit" id="auth-submit-btn" class="w-full bg-green-custom hover:bg-emerald-500 text-dash-bg font-bold p-3 rounded-xl text-xs transition shadow-lg cursor-pointer">Accedi</button>
-                    <button type="button" onclick="loginWithGoogle()" class="w-full bg-dash-bg hover:bg-border-custom text-white font-medium p-3 rounded-xl text-xs transition border border-border-custom flex items-center justify-center gap-2 cursor-pointer">
-                        🔵 Accedi con Google
-                    </button>
                     <button type="button" id="auth-switch-mode" onclick="toggleAuthMode()" class="w-full bg-dash-bg hover:bg-border-custom text-text-muted hover:text-white font-medium p-2.5 rounded-xl text-xs transition border border-border-custom cursor-pointer">Non hai un account? Registrati</button>
                 </div>
             </form>
@@ -99,7 +96,6 @@
                         </span>
                     </button>
 
-                    <button onclick="switchPage('calculator')" id="nav-btn-calculator" class="px-3 py-2 rounded-lg text-text-muted hover:text-white font-medium text-xs transition cursor-pointer whitespace-nowrap">Calcolatore Mutuo</button>
                     <button onclick="switchPage('export')" id="nav-btn-export" class="px-3 py-2 rounded-lg text-text-muted hover:text-white font-medium text-xs transition cursor-pointer whitespace-nowrap">Export Excel</button>
                 </div>
                 
@@ -361,44 +357,7 @@
             </div>
         </main>
 
-        <!-- PAGINA 4: CALCOLATORE MUTUO / PRESTITO -->
-        <main id="page-calculator" class="hidden space-y-6">
-            <div class="bg-card-bg p-6 rounded-2xl border border-border-custom shadow-xl space-y-6 max-w-3xl mx-auto">
-                <div>
-                    <h2 class="text-sm font-bold text-white uppercase tracking-wider">🏡 Calcolatore di Sostenibilità Mutuo / Prestito</h2>
-                    <p class="text-xs text-text-muted mt-0.5">Valuta la rata mensile e la sostenibilità in base alle tue entrate nette registrate.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-dash-bg p-4 rounded-xl border border-border-custom">
-                    <div>
-                        <label class="block text-[11px] text-text-muted mb-1 font-medium">Capitale Richiesto (€)</label>
-                        <input type="number" id="calc-amount" value="150000" class="w-full p-2.5 bg-card-bg border border-border-custom rounded-xl text-xs text-slate-100 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-text-muted mb-1 font-medium">Tasso d'Interesse Annuo (%)</label>
-                        <input type="number" step="0.1" id="calc-rate" value="3.5" class="w-full p-2.5 bg-card-bg border border-border-custom rounded-xl text-xs text-slate-100 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-text-muted mb-1 font-medium">Durata (Anni)</label>
-                        <input type="number" id="calc-years" value="25" class="w-full p-2.5 bg-card-bg border border-border-custom rounded-xl text-xs text-slate-100 outline-none">
-                    </div>
-                </div>
-
-                <div class="flex justify-center">
-                    <button onclick="calculateMortgage()" class="bg-green-custom hover:bg-emerald-500 text-dash-bg font-extrabold px-6 py-3 rounded-xl text-xs transition shadow-lg cursor-pointer">
-                        🧮 Calcola Sostenibilità Rata
-                    </button>
-                </div>
-
-                <div id="calc-result" class="hidden bg-dash-bg p-5 rounded-xl border border-border-custom space-y-3 text-center">
-                    <div class="text-xs text-text-muted uppercase font-bold tracking-wider">Rata Mensile Stimata</div>
-                    <div class="text-2xl font-extrabold text-blue-custom" id="calc-monthly-payment">0,00 €</div>
-                    <div class="text-xs text-slate-300" id="calc-sustainability-advice"></div>
-                </div>
-            </div>
-        </main>
-
-        <!-- PAGINA 5: EXPORT EXCEL -->
+        <!-- PAGINA 4: EXPORT EXCEL -->
         <main id="page-export" class="hidden space-y-6">
             <div class="bg-card-bg p-6 rounded-2xl border border-border-custom shadow-xl space-y-6">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -431,10 +390,10 @@
         </main>
     </div>
 
-    <!-- Firebase SDKs & Logica Cloud -->
+    <!-- Firebase SDKs & Logica Cloud (Senza Google Auth) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -486,18 +445,6 @@
                 errDiv.classList.remove('hidden');
             }
         });
-
-        window.loginWithGoogle = async function() {
-            const provider = new GoogleAuthProvider();
-            const errDiv = document.getElementById('auth-error');
-            errDiv.classList.add('hidden');
-            try {
-                await signInWithPopup(auth, provider);
-            } catch (error) {
-                errDiv.textContent = error.message;
-                errDiv.classList.remove('hidden');
-            }
-        }
 
         window.logoutUser = async function() {
             await signOut(auth);
@@ -680,7 +627,7 @@
         }
 
         function switchPage(page) {
-            ['dashboard', 'planning', 'goals', 'calculator', 'export'].forEach(p => {
+            ['dashboard', 'planning', 'goals', 'export'].forEach(p => {
                 const el = document.getElementById(`page-${p}`);
                 const btn = document.getElementById(`nav-btn-${p}`);
                 if (el) el.classList.add('hidden');
@@ -784,9 +731,7 @@
             const monthlyData = {};
             for(let i=1; i<=12; i++) monthlyData[i] = {inc:0, exp:0};
 
-            // Creiamo una copia indicizzata dell'array originale per poter mantenere il riferimento corretto all'indice originario dopo l'inversione
             const indexedTransactions = transactions.map((t, originalIndex) => ({ ...t, originalIndex }));
-            // Mostriamo dall'ultimo inserito in alto (ordine inverso)
             const reversedTransactions = [...indexedTransactions].reverse();
 
             reversedTransactions.forEach((t) => {
@@ -1151,41 +1096,6 @@
                 `;
                 budgetsContainer.appendChild(item);
             });
-        }
-
-        function calculateMortgage() {
-            const P = parseFloat(document.getElementById('calc-amount').value);
-            const annualRate = parseFloat(document.getElementById('calc-rate').value);
-            const years = parseInt(document.getElementById('calc-years').value);
-
-            const r = (annualRate / 100) / 12;
-            const n = years * 12;
-            const M = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-
-            let totalInc = 0;
-            transactions.forEach(t => {
-                if (t.type === 'income' && new Date(t.date).getFullYear() === selectedYear) totalInc += t.amount;
-            });
-            const avgMonthlyInc = totalInc > 0 ? totalInc / 12 : 2400;
-            const ratio = (M / avgMonthlyInc) * 100;
-
-            const resDiv = document.getElementById('calc-result');
-            const payEl = document.getElementById('calc-monthly-payment');
-            const adviceEl = document.getElementById('calc-sustainability-advice');
-
-            resDiv.classList.remove('hidden');
-            payEl.textContent = formatCurrency(M) + " / mese";
-
-            if (ratio <= 30) {
-                adviceEl.innerHTML = `🟢 <b>Ottima sostenibilità:</b> La rata impegna circa il <b>${ratio.toFixed(1)}%</b> delle tue entrate mensili medie (consigliato < 30%).`;
-                adviceEl.className = "text-xs text-green-custom font-medium";
-            } else if (ratio <= 40) {
-                adviceEl.innerHTML = `🟡 <b>Sostenibilità moderata:</b> La rata impegna il <b>${ratio.toFixed(1)}%</b> delle entrate. Valuta con attenzione gli altri costi fissi.`;
-                adviceEl.className = "text-xs text-amber-custom font-medium";
-            } else {
-                adviceEl.innerHTML = `🔴 <b>Sostenibilità critica:</b> La rata impegna il <b>${ratio.toFixed(1)}%</b> delle entrate (superiore al 35-40% raccomandato dalle banche).`;
-                adviceEl.className = "text-xs text-red-custom font-medium";
-            }
         }
 
         function renderExportTable() {
