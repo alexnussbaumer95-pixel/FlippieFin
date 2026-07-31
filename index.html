@@ -90,7 +90,15 @@
                 <div class="flex items-center bg-dash-bg p-1 rounded-xl border border-border-custom overflow-x-auto">
                     <button onclick="switchPage('dashboard')" id="nav-btn-dash" class="px-3 py-2 rounded-lg bg-green-custom text-dash-bg font-bold text-xs transition shadow-sm cursor-pointer whitespace-nowrap">Dashboard</button>
                     <button onclick="switchPage('planning')" id="nav-btn-planning" class="px-3 py-2 rounded-lg text-text-muted hover:text-white font-medium text-xs transition cursor-pointer whitespace-nowrap">Piano Futuro</button>
-                    <button onclick="switchPage('goals')" id="nav-btn-goals" class="px-3 py-2 rounded-lg text-text-muted hover:text-white font-medium text-xs transition cursor-pointer whitespace-nowrap">Obiettivi & Budget</button>
+                    
+                    <button onclick="switchPage('goals')" id="nav-btn-goals" class="px-3 py-2 rounded-lg text-text-muted hover:text-white font-medium text-xs transition cursor-pointer whitespace-nowrap relative">
+                        Obiettivi & Budget
+                        <span id="budget-alert-badge" class="hidden absolute -top-1 -right-1 flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                        </span>
+                    </button>
+
                     <button onclick="switchPage('calculator')" id="nav-btn-calculator" class="px-3 py-2 rounded-lg text-text-muted hover:text-white font-medium text-xs transition cursor-pointer whitespace-nowrap">Calcolatore Mutuo</button>
                     <button onclick="switchPage('export')" id="nav-btn-export" class="px-3 py-2 rounded-lg text-text-muted hover:text-white font-medium text-xs transition cursor-pointer whitespace-nowrap">Export Excel</button>
                 </div>
@@ -215,8 +223,10 @@
                                 <h2 class="text-xs font-bold text-text-muted uppercase tracking-wider">Storico Transazioni registrate nel <span id="table-year-label">2026</span></h2>
                                 <p class="text-[11px] text-slate-400 mt-0.5">Gestisci, modifica o elimina i movimenti finanziari registrati.</p>
                             </div>
-                            <div class="flex items-center gap-2 w-full md:w-auto">
-                                <input type="text" id="search-box" oninput="filterTransactions()" placeholder="Cerca descrizione o nota..." class="p-2 bg-dash-bg border border-border-custom rounded-xl text-xs text-slate-200 outline-none w-full md:w-64 focus:ring-1 focus:ring-green-custom">
+                            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                                <input type="text" id="search-box" oninput="filterTransactions()" placeholder="Cerca voce o nota..." class="p-2 bg-dash-bg border border-border-custom rounded-xl text-xs text-slate-200 outline-none w-full sm:w-44 focus:ring-1 focus:ring-green-custom">
+                                <input type="number" step="0.01" id="filter-amount" oninput="filterTransactions()" placeholder="Filtra importo..." class="p-2 bg-dash-bg border border-border-custom rounded-xl text-xs text-slate-200 outline-none w-full sm:w-32 focus:ring-1 focus:ring-green-custom">
+                                <input type="date" id="filter-date" onchange="filterTransactions()" class="p-2 bg-dash-bg border border-border-custom rounded-xl text-xs text-slate-200 outline-none w-full sm:w-36 focus:ring-1 focus:ring-green-custom">
                                 <select id="filter-cat" onchange="filterTransactions()" class="p-2 bg-dash-bg border border-border-custom rounded-xl text-xs text-slate-200 outline-none cursor-pointer">
                                     <option value="ALL">Tutte le Categorie</option>
                                     <option value="Casa">Casa</option>
@@ -722,8 +732,36 @@
             if (typeof window.saveUserDataToCloud === 'function') window.saveUserDataToCloud();
         }
 
+        function checkBudgetAlerts() {
+            const badge = document.getElementById('budget-alert-badge');
+            if (!badge) return;
+
+            let hasExceeded = false;
+            const catExpenses = {};
+            
+            transactions.forEach(t => {
+                if (t.type === 'expense' && new Date(t.date).getFullYear() === selectedYear) {
+                    catExpenses[t.category] = (catExpenses[t.category] || 0) + t.amount;
+                }
+            });
+
+            Object.entries(categoryBudgets).forEach(([cat, limit]) => {
+                const spent = catExpenses[cat] || 0;
+                if (limit > 0 && spent >= limit) {
+                    hasExceeded = true;
+                }
+            });
+
+            if (hasExceeded) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
         function updateUI() {
             filterTransactions();
+            checkBudgetAlerts();
             if (typeof window.saveUserDataToCloud === 'function') window.saveUserDataToCloud();
             if (!document.getElementById('page-export').classList.contains('hidden')) renderExportTable();
             if (!document.getElementById('page-goals').classList.contains('hidden')) { renderGoals(); renderBudgets(); }
@@ -731,8 +769,13 @@
 
         function filterTransactions() {
             const searchBox = document.getElementById('search-box');
+            const filterAmountInput = document.getElementById('filter-amount');
+            const filterDateInput = document.getElementById('filter-date');
             const filterCat = document.getElementById('filter-cat');
+
             const searchTerm = searchBox ? searchBox.value.toLowerCase() : '';
+            const amountTerm = filterAmountInput ? filterAmountInput.value.trim() : '';
+            const dateTerm = filterDateInput ? filterDateInput.value : '';
             const catFilter = filterCat ? filterCat.value : 'ALL';
             
             if (txList) txList.innerHTML = '';
@@ -741,7 +784,12 @@
             const monthlyData = {};
             for(let i=1; i<=12; i++) monthlyData[i] = {inc:0, exp:0};
 
-            transactions.forEach((t, index) => {
+            // Creiamo una copia indicizzata dell'array originale per poter mantenere il riferimento corretto all'indice originario dopo l'inversione
+            const indexedTransactions = transactions.map((t, originalIndex) => ({ ...t, originalIndex }));
+            // Mostriamo dall'ultimo inserito in alto (ordine inverso)
+            const reversedTransactions = [...indexedTransactions].reverse();
+
+            reversedTransactions.forEach((t) => {
                 const tDate = new Date(t.date);
                 const tYear = tDate.getFullYear();
                 const tMonth = tDate.getMonth() + 1;
@@ -758,8 +806,10 @@
 
                     const matchesSearch = t.description.toLowerCase().includes(searchTerm) || (t.notes && t.notes.toLowerCase().includes(searchTerm));
                     const matchesCat = catFilter === 'ALL' || t.category === catFilter;
+                    const matchesAmount = amountTerm === '' || t.amount.toString().includes(amountTerm);
+                    const matchesDate = dateTerm === '' || (t.date && t.date.split('T')[0] === dateTerm);
 
-                    if (matchesSearch && matchesCat && txList) {
+                    if (matchesSearch && matchesCat && matchesAmount && matchesDate && txList) {
                         const row = document.createElement('tr');
                         row.className = "hover:bg-dash-bg/50 transition";
                         row.innerHTML = `
@@ -773,8 +823,8 @@
                                 ${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}
                             </td>
                             <td class="p-3 text-center space-x-2">
-                                <button type="button" onclick="editTx(${index})" class="text-blue-custom hover:underline font-semibold cursor-pointer">Modifica</button>
-                                <button type="button" onclick="deleteTx(${index})" class="text-red-400 hover:text-red-300 font-semibold cursor-pointer">Elimina</button>
+                                <button type="button" onclick="editTx(${t.originalIndex})" class="text-blue-custom hover:underline font-semibold cursor-pointer">Modifica</button>
+                                <button type="button" onclick="deleteTx(${t.originalIndex})" class="text-red-400 hover:text-red-300 font-semibold cursor-pointer">Elimina</button>
                             </td>
                         `;
                         txList.appendChild(row);
