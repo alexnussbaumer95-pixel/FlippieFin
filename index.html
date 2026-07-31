@@ -44,7 +44,7 @@
             --scroll-thumb: #1e293b;
         }
 
-        /* Correzione globale per la visibilità del testo nei selettori e input in modalità chiara */
+        /* Correzione globale per la visibilità di tutti i testi e selettori in modalità chiara */
         html:not(.dark) select,
         html:not(.dark) input {
             color: #0f172a !important;
@@ -53,6 +53,9 @@
         html:not(.dark) select option {
             color: #0f172a !important;
             background-color: #ffffff !important;
+        }
+        html:not(.dark) #display-initial-bank {
+            color: #0f172a !important;
         }
     </style>
 </head>
@@ -558,7 +561,6 @@
             updateUI();
         }
 
-        // Imposta tema iniziale da localStorage o default dark
         if (localStorage.getItem('theme') === 'light') {
             document.documentElement.classList.remove('dark');
             document.documentElement.classList.add('light');
