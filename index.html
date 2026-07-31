@@ -221,9 +221,15 @@
                                     </select>
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-[11px] text-text-muted mb-1 font-medium">Note (Opzionale)</label>
-                                <input type="text" id="notes" placeholder="Dettagli aggiuntivi..." class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+                                <div>
+                                    <label class="block text-[11px] text-text-muted mb-1 font-medium">Note (Opzionale)</label>
+                                    <input type="text" id="notes" placeholder="Dettagli aggiuntivi..." class="w-full p-2.5 bg-dash-bg dark:bg-dash-bg bg-white border border-border-custom rounded-xl text-xs outline-none focus:ring-2 focus:ring-green-custom transition">
+                                </div>
+                                <div class="flex items-center space-x-2 pt-4">
+                                    <input type="checkbox" id="is-cash" class="w-4 h-4 bg-dash-bg border-border-custom rounded text-green-custom focus:ring-green-custom cursor-pointer">
+                                    <label for="is-cash" class="text-xs font-medium text-slate-300 cursor-pointer">💵 Pagato in contanti (Escludi da saldo banca)</label>
+                                </div>
                             </div>
                             <div class="flex justify-end space-x-2 pt-2">
                                 <button type="button" id="cancel-edit" onclick="resetForm()" class="hidden bg-border-custom hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-semibold transition cursor-pointer">Annulla</button>
@@ -607,27 +613,27 @@
         }
 
         const sampleTransactions = [
-            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-01-10T00:00:00.000Z" },
-            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-01-05T00:00:00.000Z" },
-            { description: "Supermercato Esselunga", category: "Alimentari", amount: 120.50, type: "expense", notes: "Spesa settimanale", date: "2026-01-12T00:00:00.000Z" },
-            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-02-10T00:00:00.000Z" },
-            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-02-05T00:00:00.000Z" },
-            { description: "Bolletta Elettricità", category: "Bollette", amount: 85.20, type: "expense", notes: "Conguaglio", date: "2026-02-18T00:00:00.000Z" },
-            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-03-10T00:00:00.000Z" },
-            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-03-05T00:00:00.000Z" },
-            { description: "Cena Ristorante", category: "Svago", amount: 95.00, type: "expense", notes: "Serata con amici", date: "2026-03-20T00:00:00.000Z" },
-            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-04-10T00:00:00.000Z" },
-            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-04-05T00:00:00.000Z" },
-            { description: "Spesa Alimentari", category: "Alimentari", amount: 145.00, type: "expense", notes: "Mercato locale", date: "2026-04-15T00:00:00.000Z" },
-            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-05-10T00:00:00.000Z" },
-            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-05-05T00:00:00.000Z" },
-            { description: "Manutenzione Auto", category: "Trasporti", amount: 210.00, type: "expense", notes: "Tagliando", date: "2026-05-22T00:00:00.000Z" },
-            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-06-10T00:00:00.000Z" },
-            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-06-05T00:00:00.000Z" },
-            { description: "Concerto Anyma Milano", category: "Svago", amount: 85.00, type: "expense", notes: "Biglietto e trasporti", date: "2026-06-25T00:00:00.000Z" },
-            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-07-10T00:00:00.000Z" },
-            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-07-05T00:00:00.000Z" },
-            { description: "Spesa Supermercato", category: "Alimentari", amount: 130.00, type: "expense", notes: "Lactosio free", date: "2026-07-28T00:00:00.000Z" }
+            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-01-10T00:00:00.000Z", isCash: false },
+            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-01-05T00:00:00.000Z", isCash: false },
+            { description: "Supermercato Esselunga", category: "Alimentari", amount: 120.50, type: "expense", notes: "Spesa settimanale", date: "2026-01-12T00:00:00.000Z", isCash: false },
+            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-02-10T00:00:00.000Z", isCash: false },
+            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-02-05T00:00:00.000Z", isCash: false },
+            { description: "Bolletta Elettricità", category: "Bollette", amount: 85.20, type: "expense", notes: "Conguaglio", date: "2026-02-18T00:00:00.000Z", isCash: false },
+            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-03-10T00:00:00.000Z", isCash: false },
+            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-03-05T00:00:00.000Z", isCash: false },
+            { description: "Cena Ristorante", category: "Svago", amount: 95.00, type: "expense", notes: "Serata con amici", date: "2026-03-20T00:00:00.000Z", isCash: false },
+            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-04-10T00:00:00.000Z", isCash: false },
+            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-04-05T00:00:00.000Z", isCash: false },
+            { description: "Spesa Alimentari", category: "Alimentari", amount: 145.00, type: "expense", notes: "Mercato locale", date: "2026-04-15T00:00:00.000Z", isCash: false },
+            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-05-10T00:00:00.000Z", isCash: false },
+            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-05-05T00:00:00.000Z", isCash: false },
+            { description: "Manutenzione Auto", category: "Trasporti", amount: 210.00, type: "expense", notes: "Tagliando", date: "2026-05-22T00:00:00.000Z", isCash: false },
+            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-06-10T00:00:00.000Z", isCash: false },
+            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-06-05T00:00:00.000Z", isCash: false },
+            { description: "Concerto Anyma Milano", category: "Svago", amount: 85.00, type: "expense", notes: "Biglietto e trasporti", date: "2026-06-25T00:00:00.000Z", isCash: false },
+            { description: "Stipendio Mensile", category: "Stipendio", amount: 2400.00, type: "income", notes: "Azienda Terlano", date: "2026-07-10T00:00:00.000Z", isCash: false },
+            { description: "Affitto Appartamento", category: "Casa", amount: 750.00, type: "expense", notes: "Canone mensile", date: "2026-07-05T00:00:00.000Z", isCash: false },
+            { description: "Spesa Supermercato", category: "Alimentari", amount: 130.00, type: "expense", notes: "Lactosio free", date: "2026-07-28T00:00:00.000Z", isCash: false }
         ];
 
         let transactions = sampleTransactions;
@@ -644,6 +650,7 @@
         const typeInput = document.getElementById('type');
         const recurrenceInput = document.getElementById('recurrence');
         const notesInput = document.getElementById('notes');
+        const isCashInput = document.getElementById('is-cash');
         const editIndexInput = document.getElementById('edit-index');
         const formTitle = document.getElementById('form-title');
         const submitBtn = document.getElementById('submit-btn');
@@ -789,9 +796,10 @@
             
             if (txList) txList.innerHTML = '';
             let income = 0, expense = 0;
+            let bankIncome = 0, bankExpense = 0;
             const expenseCats = {};
             const monthlyData = {};
-            for(let i=1; i<=12; i++) monthlyData[i] = {inc:0, exp:0};
+            for(let i=1; i<=12; i++) monthlyData[i] = {inc:0, exp:0, bankExp:0};
 
             const indexedTransactions = transactions.map((t, originalIndex) => ({ ...t, originalIndex }));
             const reversedTransactions = [...indexedTransactions].reverse();
@@ -805,10 +813,17 @@
                     if (t.type === 'income') {
                         income += t.amount;
                         monthlyData[tMonth].inc += t.amount;
+                        if (!t.isCash) {
+                            bankIncome += t.amount;
+                        }
                     } else {
                         expense += t.amount;
                         monthlyData[tMonth].exp += t.amount;
                         expenseCats[t.category] = (expenseCats[t.category] || 0) + t.amount;
+                        if (!t.isCash) {
+                            bankExpense += t.amount;
+                            monthlyData[tMonth].bankExp += t.amount;
+                        }
                     }
 
                     const matchesSearch = t.description.toLowerCase().includes(searchTerm) || (t.notes && t.notes.toLowerCase().includes(searchTerm));
@@ -823,7 +838,10 @@
                             <td class="p-3 text-slate-700 dark:text-slate-300 font-medium">${!isNaN(tDate.getTime()) ? tDate.toLocaleDateString('it-IT') : '-'}</td>
                             <td class="p-3"><span class="bg-dash-bg dark:bg-dash-bg bg-slate-100 px-2.5 py-1 rounded-lg border border-border-custom text-slate-700 dark:text-slate-300">${t.category}</span></td>
                             <td class="p-3">
-                                <div class="font-bold text-slate-900 dark:text-white">${t.description}</div>
+                                <div class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                                    ${t.description}
+                                    ${t.isCash ? '<span class="text-[10px] bg-amber-custom/20 text-amber-custom px-1.5 py-0.5 rounded border border-amber-custom/30 font-medium">Contanti</span>' : ''}
+                                </div>
                                 ${t.notes ? `<div class="text-[10px] text-text-muted">${t.notes}</div>` : ''}
                             </td>
                             <td class="p-3 text-right font-extrabold ${t.type === 'income' ? 'text-green-custom' : 'text-red-custom'}">
@@ -840,7 +858,7 @@
             });
 
             const totalSavings = income - expense;
-            const finalBankBalance = initialBankBalance + income - expense;
+            const finalBankBalance = initialBankBalance + bankIncome - bankExpense;
 
             const nwEl = document.getElementById('header-networth');
             const incEl = document.getElementById('header-income');
@@ -879,7 +897,8 @@
                         amount: parseFloat(amtInput.value),
                         type: typeInput.value,
                         notes: notesInput.value,
-                        date: validIsoDate
+                        date: validIsoDate,
+                        isCash: isCashInput ? isCashInput.checked : false
                     };
 
                     if (editIdx > -1) {
@@ -896,6 +915,7 @@
 
                 form.reset();
                 dateInput.value = realTodayStr;
+                if (isCashInput) isCashInput.checked = false;
                 updateUI();
             });
         }
@@ -908,6 +928,7 @@
             typeInput.value = t.type;
             notesInput.value = t.notes || '';
             dateInput.value = t.date && !isNaN(new Date(t.date).getTime()) ? t.date.split('T')[0] : realTodayStr;
+            if (isCashInput) isCashInput.checked = !!t.isCash;
             editIndexInput.value = index;
             if (recurrenceInput) recurrenceInput.value = 'none';
             
@@ -921,6 +942,7 @@
         function resetForm() {
             form.reset();
             dateInput.value = realTodayStr;
+            if (isCashInput) isCashInput.checked = false;
             editIndexInput.value = -1;
             formTitle.textContent = "Nuovo Movimento";
             submitBtn.textContent = "Aggiungi Movimento";
@@ -1187,7 +1209,10 @@
                     <td class="p-3 text-slate-700 dark:text-slate-300">${dateFormatted}</td>
                     <td class="p-3 font-semibold ${t.type === 'income' ? 'text-green-custom' : 'text-red-custom'}">${t.type === 'income' ? 'Entrata' : 'Uscita'}</td>
                     <td class="p-3 text-slate-700 dark:text-slate-300">${t.category}</td>
-                    <td class="p-3 text-slate-900 dark:text-white font-medium">${t.description}</td>
+                    <td class="p-3 text-slate-900 dark:text-white font-medium">
+                        ${t.description}
+                        ${t.isCash ? '<span class="ml-1 text-[10px] bg-amber-custom/20 text-amber-custom px-1.5 py-0.5 rounded border border-amber-custom/30 font-medium">Contanti</span>' : ''}
+                    </td>
                     <td class="p-3 text-text-muted">${t.notes || '-'}</td>
                     <td class="p-3 text-right font-bold ${t.type === 'income' ? 'text-green-custom' : 'text-red-custom'}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</td>
                     <td class="p-3 text-center space-x-2">
@@ -1207,6 +1232,7 @@
                     "Tipo": t.type === 'income' ? 'Entrata' : 'Uscita',
                     "Categoria": t.category,
                     "Descrizione": t.description,
+                    "Metodo": t.isCash ? 'Contanti' : 'Banca/Altro',
                     "Nota": t.notes || '',
                     "Importo (€)": t.type === 'income' ? t.amount : -t.amount
                 };
@@ -1246,7 +1272,7 @@
             const nwData = [];
 
             for (let i = 1; i <= 12; i++) {
-                const net = monthlyData[i].inc - monthlyData[i].exp;
+                const net = monthlyData[i].inc - monthlyData[i].bankExp;
                 cumulative += net;
                 nwData.push(cumulative);
             }
